@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import com.example.moviecatalogue.data.MovieEntity
 import com.example.moviecatalogue.data.TvShowEntity
+import com.example.moviecatalogue.utils.EspressoIdlingResource
 import com.example.moviecatalogue.utils.JsonHelper
 
 class RemoteDataSource private constructor(private val jsonHelper: JsonHelper){
@@ -24,29 +25,39 @@ class RemoteDataSource private constructor(private val jsonHelper: JsonHelper){
     }
 
     fun getMovies(callback: LoadMoviesCallback){
-        handler.postDelayed(
-            { callback.onAllMovieReceived(jsonHelper.loadMovies()) },
-            SERVICE_LATENCY_IN_MILLIS
+
+        EspressoIdlingResource.increment()
+        handler.postDelayed({
+            callback.onAllMovieReceived(jsonHelper.loadMovies())
+            EspressoIdlingResource.decrement()
+            }, SERVICE_LATENCY_IN_MILLIS
         )
     }
 
     fun getTvShows(callback: LoadTvShowsCallback){
-        handler.postDelayed(
-            { callback.onAllTvShowReceived(jsonHelper.loadTvShows()) },
-            SERVICE_LATENCY_IN_MILLIS
+        EspressoIdlingResource.increment()
+        handler.postDelayed({
+            callback.onAllTvShowReceived(jsonHelper.loadTvShows())
+            EspressoIdlingResource.decrement()
+                            }, SERVICE_LATENCY_IN_MILLIS
         )
     }
 
     fun getTvShow(id: String,callback: LoadTvShowCallback){
+        EspressoIdlingResource.increment()
         handler.postDelayed(
-            {callback.onTvShowReceived(jsonHelper.loadTvShow(id))},
-            SERVICE_LATENCY_IN_MILLIS
+            {callback.onTvShowReceived(jsonHelper.loadTvShow(id))
+            EspressoIdlingResource.decrement()
+            }, SERVICE_LATENCY_IN_MILLIS
         )
     }
 
     fun getMovie(id: String,callback: LoadMovieCallback){
+        EspressoIdlingResource.increment()
         handler.postDelayed(
-            {callback.onMovieReceived(jsonHelper.loadMovie(id))},
+            {callback.onMovieReceived(jsonHelper.loadMovie(id))
+                EspressoIdlingResource.decrement()
+            },
             SERVICE_LATENCY_IN_MILLIS
         )
     }
