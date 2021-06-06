@@ -4,6 +4,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.ViewModelProvider
@@ -12,15 +13,18 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.data.MovieEntity
-import com.example.moviecatalogue.data.TvShowEntity
+import com.example.moviecatalogue.data.source.local.entity.MovieEntity
+import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.example.moviecatalogue.databinding.ActivityDetailBinding
 import com.example.moviecatalogue.utils.Utils
 import com.example.moviecatalogue.viewmodel.ViewModelFactory
+import com.example.moviecatalogue.vo.Status
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+    private lateinit var tvShow: TvShowEntity
+    private lateinit var movie: MovieEntity
 
     companion object {
         const val EXTRA_ID = "extra_id"
@@ -39,9 +43,6 @@ class DetailActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this)
         val viewModel = ViewModelProvider(this,factory).get(DetailViewModel::class.java)
 
-        var tvShow = TvShowEntity()
-        var movie = MovieEntity()
-
         val extras = intent.extras
         if(extras != null){
             val type = extras.getString(EXTRA_TYPE).toString()
@@ -53,10 +54,21 @@ class DetailActivity : AppCompatActivity() {
                     binding.progressbar.visibility = View.VISIBLE
 
                     viewModel.setTvShow(id)
-                    viewModel.getTvShow().observe(this , {
-                        binding.progressbar.visibility = View.INVISIBLE
-                        tvShow = it
-                        renderDetail(type,null,it)
+                    viewModel.getTvShow().observe(this , { tv ->
+                        if(tv != null){
+                            when(tv.status){
+                                Status.LOADING -> binding.progressbar.visibility = View.VISIBLE
+                                Status.SUCCESS -> {
+                                    binding.progressbar.visibility = View.GONE
+                                    tvShow = tv.data!!
+                                    renderDetail(type,null,tvShow)
+                                }
+                                Status.ERROR -> {
+                                    binding.progressbar.visibility = View.VISIBLE
+                                    Toast.makeText(applicationContext,"gagal menampilkan detail",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
                     })
     
                 }else{
@@ -64,12 +76,22 @@ class DetailActivity : AppCompatActivity() {
                     binding.progressbar.visibility = View.VISIBLE
 
                     viewModel.setMovie(id)
-                    viewModel.getMovie().observe(this, {
-                        binding.progressbar.visibility = View.INVISIBLE
-                        movie = it
-                        renderDetail(type,it,null)
+                    viewModel.getMovie().observe(this, { mv ->
+                        if(mv != null){
+                            when(mv.status){
+                                Status.LOADING -> binding.progressbar.visibility = View.VISIBLE
+                                Status.SUCCESS -> {
+                                    binding.progressbar.visibility = View.GONE
+                                    movie = mv.data!!
+                                    renderDetail(type,movie,null)
+                                }
+                                Status.ERROR -> {
+                                    binding.progressbar.visibility = View.VISIBLE
+                                    Toast.makeText(applicationContext,"gagal menampilkan detail",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
                     })
-
                 }
 
                 binding.fabShare.setOnClickListener{

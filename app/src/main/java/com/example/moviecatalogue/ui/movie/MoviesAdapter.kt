@@ -11,7 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.data.MovieEntity
+import com.example.moviecatalogue.data.source.local.entity.MovieEntity
 import com.example.moviecatalogue.databinding.MovieItemBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.utils.Utils
@@ -57,7 +57,7 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>(){
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context,DetailActivity::class.java)
                     intent.putExtra(DetailActivity.EXTRA_TYPE,"movie")
-                    intent.putExtra(DetailActivity.EXTRA_ID,movie.id)
+                    intent.putExtra(DetailActivity.EXTRA_ID,movie.movieId)
                     itemView.context.startActivity(intent)
                 }
 

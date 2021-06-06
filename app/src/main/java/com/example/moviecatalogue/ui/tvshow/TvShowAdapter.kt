@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.data.TvShowEntity
+import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.example.moviecatalogue.databinding.TvShowItemBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 
@@ -45,7 +45,7 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context,DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_ID,tvShow.id)
+                    intent.putExtra(DetailActivity.EXTRA_ID,tvShow.tvShowId)
                     intent.putExtra(DetailActivity.EXTRA_TYPE,"tv_show")
                     itemView.context.startActivity(intent)
                 }

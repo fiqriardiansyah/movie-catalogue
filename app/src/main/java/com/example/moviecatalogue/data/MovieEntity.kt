@@ -12,5 +12,6 @@ data class MovieEntity (
     var genre: String? = "",
     var overview: String? = "",
     var director: String? = "",
-    var poster: Drawable? = null
+    var poster: String? = "",
+    var isFavorite: Boolean = false
 )

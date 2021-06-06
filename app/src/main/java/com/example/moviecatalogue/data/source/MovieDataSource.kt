@@ -1,16 +1,18 @@
 package com.example.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
-import com.example.moviecatalogue.data.MovieEntity
-import com.example.moviecatalogue.data.TvShowEntity
+import com.example.moviecatalogue.data.source.local.entity.MovieEntity
+import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.example.moviecatalogue.vo.Resource
 
 interface MovieDataSource {
 
-    fun getAllMovie(): LiveData<List<MovieEntity>>
+    fun getAllMovie(): LiveData<Resource<List<MovieEntity>>>
 
-    fun getAllTvShow(): LiveData<List<TvShowEntity>>
+    fun getAllTvShow(): LiveData<Resource<List<TvShowEntity>>>
 
-    fun getMovie(id: String): LiveData<MovieEntity>
+    fun getMovie(id: String): LiveData<Resource<MovieEntity>>
 
-    fun getTvShow(id: String): LiveData<TvShowEntity>
+    fun getTvShow(id: String): LiveData<Resource<TvShowEntity>>
+
 }

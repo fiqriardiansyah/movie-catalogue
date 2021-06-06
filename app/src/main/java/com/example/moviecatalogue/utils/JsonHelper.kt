@@ -23,12 +23,6 @@ class JsonHelper(val context: Context) {
         }
     }
 
-    private fun getPoster(type: String,name: String): Drawable{
-        val inputStream = context.assets.open("$type/$name")
-        val drawable = Drawable.createFromStream(inputStream,null)
-        return drawable
-    }
-
     fun loadMovies(): List<MovieEntity>{
         val list = ArrayList<MovieEntity>()
 
@@ -50,8 +44,8 @@ class JsonHelper(val context: Context) {
                 val director = movie.getString("director")
                 val poster = movie.getString("poster")
 
-                val posterDrawable = getPoster("movie",poster)
-                val mv = MovieEntity(id,title,year,duration,release,score,genre,overview,director,posterDrawable)
+//                val posterDrawable = getPoster("movie",poster)
+                val mv = MovieEntity(id,title,year,duration,release,score,genre,overview,director,poster)
                 list.add(mv)
             }
 
@@ -83,8 +77,8 @@ class JsonHelper(val context: Context) {
                 val creator = movie.getString("creator")
                 val poster = movie.getString("poster")
 
-                val posterDrawable = getPoster("tvshow",poster)
-                val mv = TvShowEntity(id,title,year,duration,score,genre,description,overview,creator,posterDrawable)
+//                val posterDrawable = getPoster("tvshow",poster)
+                val mv = TvShowEntity(id,title,year,duration,score,genre,description,overview,creator,poster)
                 list.add(mv)
             }
 

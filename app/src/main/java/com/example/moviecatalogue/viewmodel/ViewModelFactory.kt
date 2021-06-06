@@ -19,6 +19,7 @@ class ViewModelFactory private constructor(private val movieRepository: MovieRep
             instance ?: synchronized(this){
                 instance ?: ViewModelFactory( Injection.provideRepository(context) ).apply { instance = this }
             }
+
     }
 
 
