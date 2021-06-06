@@ -1,27 +1,25 @@
 package com.example.moviecatalogue.data.source.local
 
 import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.moviecatalogue.data.source.local.entity.MovieEntity
 import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.example.moviecatalogue.data.source.local.room.FavoriteDao
 import com.example.moviecatalogue.data.source.local.room.MovieDao
 
-class LocalDataSource private constructor(private val movieDao: MovieDao){
+class LocalDataSource private constructor(private val movieDao: MovieDao,private val favoriteDao: FavoriteDao){
 
     companion object {
         private var instance: LocalDataSource? = null
 
-        fun getInstance(movieDao: MovieDao): LocalDataSource {
-            return instance ?: LocalDataSource(movieDao).apply { instance = this }
+        fun getInstance(movieDao: MovieDao,favoriteDao: FavoriteDao): LocalDataSource {
+            return instance ?: LocalDataSource(movieDao,favoriteDao).apply { instance = this }
         }
     }
 
     fun getAllMovie() : LiveData<List<MovieEntity>> = movieDao.getMovies()
 
     fun getAllTvShow(): LiveData<List<TvShowEntity>> = movieDao.getTvShows()
-
-    fun getFavoritesMovie(): LiveData<List<MovieEntity>> = movieDao.getFavoriteMovies()
-
-    fun getFavoriteTvShow(): LiveData<List<TvShowEntity>> = movieDao.getFavoriteTvShows()
 
     fun getMovie(movieId: String) = movieDao.getMovie(movieId)
 
@@ -31,9 +29,21 @@ class LocalDataSource private constructor(private val movieDao: MovieDao){
 
     fun insertTvShows(tvShow: List<TvShowEntity>) = movieDao.insertTvShows(tvShow)
 
-    fun deleteMovie(movie: MovieEntity) = movieDao.deleteMovie(movie)
 
-    fun deleteTvShow(tvShow: TvShowEntity) = movieDao.deleteTvShow(tvShow)
+    fun getAllFavoriteMovie(): LiveData<List<MovieEntity>> = favoriteDao.getAllMovies()
 
+    fun getAllFavoriteTvShow(): LiveData<List<TvShowEntity>> = favoriteDao.getAllTvShows()
+
+    fun getFavoriteMovie(movieId: String): LiveData<MovieEntity> = favoriteDao.getMovie(movieId)
+
+    fun getFavoriteTvShow(tvShowId: String): LiveData<TvShowEntity> = favoriteDao.getTvShow(tvShowId)
+
+    fun insertFavoriteMovie(movie: MovieEntity) = favoriteDao.insertMovie(movie)
+
+    fun insertFavoriteTvShow(tvShow: TvShowEntity) = favoriteDao.insertTvShow(tvShow)
+
+    fun deleteFavoriteMovie(movie: MovieEntity) = favoriteDao.deleteMovie(movie)
+
+    fun deleteFavoriteTvShow(tvShow: TvShowEntity) = favoriteDao.deleteTvShow(tvShow)
 
 }

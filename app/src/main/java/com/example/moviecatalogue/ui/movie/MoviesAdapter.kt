@@ -1,8 +1,10 @@
 package com.example.moviecatalogue.ui.movie
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.*
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,7 @@ import com.example.moviecatalogue.databinding.MovieItemBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.utils.Utils
 
-class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>(){
+class MoviesAdapter(val context: Context): RecyclerView.Adapter<MoviesAdapter.ViewHolder>(){
 
     val listMovies = ArrayList<MovieEntity>()
 
@@ -41,8 +43,10 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>(){
                 var requestOptions = RequestOptions()
                 requestOptions = requestOptions.transform(CenterCrop(),RoundedCorners(22)).placeholder(R.drawable.ic_loading)
 
+                val poster = Utils.getPoster("movie",movie.poster,context)
+
                 Glide.with(itemView.context)
-                    .load(movie.poster)
+                    .load(poster)
                     .apply(requestOptions)
                     .error(R.drawable.ic_error)
                     .into(posterMovie)

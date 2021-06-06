@@ -41,7 +41,4 @@ data class TvShowEntity (
     @ColumnInfo(name = "poster")
     var poster: String,
 
-    @ColumnInfo(name = "isfavorite")
-    var isFavorite: Boolean,
-
 )

@@ -1,8 +1,11 @@
 package com.example.moviecatalogue.ui.detail
 
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Html
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +18,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.source.local.entity.MovieEntity
 import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.example.moviecatalogue.data.source.local.room.FavoriteDatabase
+import com.example.moviecatalogue.data.source.local.room.MovieDao
+import com.example.moviecatalogue.data.source.local.room.MovieDatabase
 import com.example.moviecatalogue.databinding.ActivityDetailBinding
+import com.example.moviecatalogue.ui.favorites.FavoritesActivity
+import com.example.moviecatalogue.utils.AppExecutors
 import com.example.moviecatalogue.utils.Utils
 import com.example.moviecatalogue.viewmodel.ViewModelFactory
 import com.example.moviecatalogue.vo.Status
@@ -25,6 +33,10 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var tvShow: TvShowEntity
     private lateinit var movie: MovieEntity
+    private lateinit var appExecutors: AppExecutors
+    private lateinit var favoriteDatabase: FavoriteDatabase
+
+    private lateinit var viewModel: DetailViewModel
 
     companion object {
         const val EXTRA_ID = "extra_id"
@@ -40,8 +52,12 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_backspace)
 
+        favoriteDatabase = FavoriteDatabase.getInstance(this)
+
         val factory = ViewModelFactory.getInstance(this)
-        val viewModel = ViewModelProvider(this,factory).get(DetailViewModel::class.java)
+        viewModel = ViewModelProvider(this,factory).get(DetailViewModel::class.java)
+
+        appExecutors = AppExecutors()
 
         val extras = intent.extras
         if(extras != null){
@@ -62,6 +78,7 @@ class DetailActivity : AppCompatActivity() {
                                     binding.progressbar.visibility = View.GONE
                                     tvShow = tv.data!!
                                     renderDetail(type,null,tvShow)
+                                    fabFavorite(null,tv.data)
                                 }
                                 Status.ERROR -> {
                                     binding.progressbar.visibility = View.VISIBLE
@@ -84,6 +101,7 @@ class DetailActivity : AppCompatActivity() {
                                     binding.progressbar.visibility = View.GONE
                                     movie = mv.data!!
                                     renderDetail(type,movie,null)
+                                    fabFavorite(mv.data,null)
                                 }
                                 Status.ERROR -> {
                                     binding.progressbar.visibility = View.VISIBLE
@@ -108,6 +126,40 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    private fun fabFavorite(movieEntity: MovieEntity?,tvShowEntity: TvShowEntity?){
+
+        if(movieEntity != null){
+            viewModel.getFavoriteMovie().observe(this,{ mv ->
+                binding.fabFavorite.setImageResource( if(mv != null) R.drawable.ic_favorite_full else R.drawable.ic_favorite_border)
+
+                binding.fabFavorite.setOnClickListener {
+                    appExecutors.diskIO().execute {
+                        if(mv != null){
+                            favoriteDatabase.favoriteDao().deleteMovie(mv)
+                        }else{
+                            favoriteDatabase.favoriteDao().insertMovie(movie)
+                        }
+                    }
+                }
+            })
+        }else{
+            viewModel.getFavoriteTvShow().observe(this , { tv ->
+                binding.fabFavorite.setImageResource( if(tv != null) R.drawable.ic_favorite_full else R.drawable.ic_favorite_border)
+
+                binding.fabFavorite.setOnClickListener {
+                    appExecutors.diskIO().execute {
+                        if(tv != null){
+                            favoriteDatabase.favoriteDao().deleteTvShow(tv)
+                        }else{
+                            favoriteDatabase.favoriteDao().insertTvShow(tvShow)
+                        }
+                    }
+                }
+            })
+        }
+
+    }
+
     private fun renderDetail(type: String,movie: MovieEntity?,tvShow: TvShowEntity?){
 
         when(type){
@@ -115,16 +167,18 @@ class DetailActivity : AppCompatActivity() {
 
                 supportActionBar?.setTitle(Html.fromHtml("<font color=\"#606060\">${movie?.title}</font>"))
 
+                val poster = Utils.getPoster("movie",movie!!.poster,applicationContext)
+
                 Glide.with(this)
-                    .load(movie?.poster)
+                    .load(poster)
                     .into(binding.posterJumbo)
 
-                var requestOptions = RequestOptions()
+                val requestOptions = RequestOptions()
                     .transform(CenterCrop(),RoundedCorners(22))
                     .placeholder(R.drawable.ic_loading)
 
                 Glide.with(this)
-                    .load(movie?.poster)
+                    .load(poster)
                     .apply(requestOptions)
                     .error(R.drawable.ic_error)
                     .into(binding.headerDetail.poster)
@@ -151,8 +205,10 @@ class DetailActivity : AppCompatActivity() {
 
                 supportActionBar?.setTitle(Html.fromHtml("<font color=\"#606060\">${tvShow?.title}</font>"))
 
+                val poster = Utils.getPoster("tvshow",tvShow!!.poster,applicationContext)
+
                 Glide.with(this)
-                    .load(tvShow?.poster)
+                    .load(poster)
                     .into(binding.posterJumbo)
 
                 var requestOptions = RequestOptions()
@@ -160,7 +216,7 @@ class DetailActivity : AppCompatActivity() {
                     .placeholder(R.drawable.ic_loading)
 
                 Glide.with(this)
-                    .load(tvShow?.poster)
+                    .load(poster)
                     .apply(requestOptions)
                     .error(R.drawable.ic_error)
                     .into(binding.headerDetail.poster)

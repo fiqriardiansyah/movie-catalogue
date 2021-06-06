@@ -23,4 +23,7 @@ class DetailViewModel(private val movieRepository: MovieRepository): ViewModel()
     fun getMovie(): LiveData<Resource<MovieEntity>> = movieRepository.getMovie(movieId)
     fun getTvShow(): LiveData<Resource<TvShowEntity>> = movieRepository.getTvShow(tvShowId)
 
+    fun getFavoriteMovie(): LiveData<MovieEntity> = movieRepository.getFavoriteMovie(movieId)
+    fun getFavoriteTvShow(): LiveData<TvShowEntity> = movieRepository.getFavoriteTvShow(tvShowId)
+
 }

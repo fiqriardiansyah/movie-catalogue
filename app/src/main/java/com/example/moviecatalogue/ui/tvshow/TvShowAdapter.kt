@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.ui.tvshow
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,8 +13,9 @@ import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.example.moviecatalogue.databinding.TvShowItemBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.example.moviecatalogue.utils.Utils
 
-class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
+class TvShowAdapter(val context: Context): RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
 
     val listTvShow = ArrayList<TvShowEntity>()
 
@@ -37,8 +39,10 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
                 var requestOptions = RequestOptions()
                 requestOptions = requestOptions.transform(CenterCrop(),RoundedCorners(22)).placeholder(R.drawable.ic_loading)
 
+                val poster = Utils.getPoster("tvshow",tvShow.poster,context)
+
                 Glide.with(itemView.context)
-                    .load(tvShow.poster)
+                    .load(poster)
                     .apply(requestOptions)
                     .error(R.drawable.ic_error)
                     .into(posterTvShow)

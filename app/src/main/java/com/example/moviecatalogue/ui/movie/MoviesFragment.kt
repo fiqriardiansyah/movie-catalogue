@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.ui.movie
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.moviecatalogue.databinding.FragmentMoviesBinding
+import com.example.moviecatalogue.ui.main.MainActivity
 import com.example.moviecatalogue.viewmodel.ViewModelFactory
 import com.example.moviecatalogue.vo.Status
 
@@ -16,6 +19,8 @@ class MoviesFragment : Fragment() {
 
     private lateinit var binding: FragmentMoviesBinding
     private lateinit var viewModel: MovieViewModel
+    private lateinit var adapter: MoviesAdapter
+//    private lateinit var sqlQuery: SimpleSQLiteQuery
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,10 +32,10 @@ class MoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = MoviesAdapter()
 
         val factory = ViewModelFactory.getInstance(requireActivity())
         viewModel = ViewModelProvider(this,factory).get(MovieViewModel::class.java)
+        adapter = MoviesAdapter(activity as Context)
 
         binding.progressbar.visibility = View.VISIBLE
 
@@ -41,21 +46,45 @@ class MoviesFragment : Fragment() {
             adapter.notifyDataSetChanged()
         }
 
-        viewModel.getMovies().observe(this,{ movies ->
-            if(movies != null){
-                when(movies.status){
-                    Status.LOADING -> binding.progressbar.visibility = View.VISIBLE
-                    Status.SUCCESS -> {
-                        binding.progressbar.visibility = View.GONE
-                        adapter.setData(movies = movies.data)
-                    }
-                    Status.ERROR -> {
-                        binding.progressbar.visibility = View.GONE
-                        Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+        if(activity is MainActivity){
+            viewModel.getMovies().observe(this,{ movies ->
+                if(movies != null){
+                    when(movies.status){
+                        Status.LOADING -> binding.progressbar.visibility = View.VISIBLE
+                        Status.SUCCESS -> {
+                            binding.progressbar.visibility = View.GONE
+                            adapter.setData(movies.data)
+                            adapter.notifyDataSetChanged()
+                            if(movies.data?.size == 0){
+                                binding.emptyAnimation.visibility = View.VISIBLE
+                            }else{
+                                binding.emptyAnimation.visibility = View.GONE
+                            }
+                        }
+                        Status.ERROR -> {
+                            binding.progressbar.visibility = View.GONE
+                            Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
-        })
+            })
+        }else{
+            viewModel.getAllFavoriteMovies().observe(this,{ movies ->
+                if(movies != null){
+                    binding.progressbar.visibility = View.GONE
+                    adapter.setData(movies)
+                    adapter.notifyDataSetChanged()
+                    if(movies.size == 0){
+                        binding.emptyAnimation.visibility = View.VISIBLE
+                    }else{
+                        binding.emptyAnimation.visibility = View.GONE
+                    }
+                }
+            })
+        }
+
+
 
     }
+
 }

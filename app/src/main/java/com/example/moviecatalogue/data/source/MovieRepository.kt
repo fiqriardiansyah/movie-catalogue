@@ -3,6 +3,7 @@ package com.example.moviecatalogue.data.source
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.moviecatalogue.data.MovieEntity
 import com.example.moviecatalogue.data.TvShowEntity
 import com.example.moviecatalogue.data.source.local.entity.MovieEntity as MovieEntityDb
@@ -51,7 +52,6 @@ class MovieRepository private constructor(
                val movieList = ArrayList<MovieEntityDb>()
 
                for (response in data){
-                   Log.d("Movie","${response.title}")
                    val movie = MovieEntityDb(
                        response.id!!,
                        response.title!!,
@@ -62,8 +62,7 @@ class MovieRepository private constructor(
                        response.genre!!,
                        response.overview!!,
                        response.director!!,
-                       response.poster!!,
-                       response.isFavorite!!
+                       response.poster!!
                    )
                    movieList.add(movie)
                }
@@ -77,26 +76,21 @@ class MovieRepository private constructor(
     override fun getAllTvShow(): LiveData<Resource<List<TvShowEntityDb>>> {
         return object : NetworkBoundResource<List<TvShowEntityDb>,List<TvShowEntity>>(appExecutors){
             override fun loadFromDB(): LiveData<List<TvShowEntityDb>> {
-                Log.d("load","LOAD TV")
                 return localDataSource.getAllTvShow()
             }
 
             override fun shouldFetch(data: List<TvShowEntityDb>?): Boolean {
-                Log.d("shoudfetch",(data == null || data.isEmpty()).toString())
                 return data == null || data.isEmpty()
             }
 
             override fun createCall(): LiveData<ApiResponse<List<TvShowEntity>>> {
-                Log.d("createCall","create TV")
                 return remoteDataSource.getTvShows()
             }
 
             override fun saveCallResult(data: List<TvShowEntity>) {
-                Log.d("saveCallREsult","saveCall TV")
                 val tvShows = ArrayList<TvShowEntityDb>()
 
                 for (response in data){
-                    Log.d("TvSHOW","${response.title}")
                     val tvSHow = TvShowEntityDb(
                         response.id!!,
                         response.title!!,
@@ -107,8 +101,7 @@ class MovieRepository private constructor(
                         response.description!!,
                         response.overview!!,
                         response.creator!!,
-                        response.poster!!,
-                        response.isFavorite!!
+                        response.poster!!
                     )
                     tvShows.add(tvSHow)
                 }
@@ -160,5 +153,13 @@ class MovieRepository private constructor(
 
         }.asLiveData()
     }
+
+    fun getAllFavoriteMovie(): LiveData<List<MovieEntityDb>> = localDataSource.getAllFavoriteMovie()
+
+    fun getAllFavoriteTvShow(): LiveData<List<TvShowEntityDb>> = localDataSource.getAllFavoriteTvShow()
+
+    fun getFavoriteMovie(id: String): LiveData<MovieEntityDb> = localDataSource.getFavoriteMovie(id)
+
+    fun getFavoriteTvShow(id: String): LiveData<TvShowEntityDb> = localDataSource.getFavoriteTvShow(id)
 
 }

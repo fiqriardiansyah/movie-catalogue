@@ -13,5 +13,4 @@ data class TvShowEntity (
     var overview: String? = "",
     var creator: String? = "",
     var poster: String? = "",
-    var isFavorite: Boolean = false
 )

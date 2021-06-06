@@ -14,7 +14,6 @@ abstract class MovieDatabase: RoomDatabase() {
 
     companion object {
         private var instance: MovieDatabase? = null
-
         fun getInstance(context: Context): MovieDatabase{
             return instance ?: synchronized(this){
                 Room.databaseBuilder(context.applicationContext,MovieDatabase::class.java,"movie.db")
@@ -23,7 +22,6 @@ abstract class MovieDatabase: RoomDatabase() {
                     }
             }
         }
-
     }
 
 }
