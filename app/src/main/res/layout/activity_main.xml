@@ -8,6 +8,15 @@
     android:orientation="vertical"
     tools:context=".ui.main.MainActivity">
 
+    <EditText
+        android:id="@+id/edtSearch"
+        android:hint="@string/hint_search"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:background="@drawable/bg_search_input"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"

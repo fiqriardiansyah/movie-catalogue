@@ -36,4 +36,10 @@ interface FavoriteDao {
     @Delete
     fun deleteTvShow(tvShow: TvShowEntity)
 
+    @Query("SELECT * FROM movieentities WHERE title LIKE '%'|| :title ||'%' ")
+    fun searchMovie(title: String): DataSource.Factory<Int, MovieEntity>
+
+    @Query("SELECT * FROM tvshowentities WHERE title LIKE '%'|| :title ||'%' ")
+    fun searchTvShow(title: String): DataSource.Factory<Int, TvShowEntity>
+
 }

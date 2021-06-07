@@ -193,4 +193,19 @@ class MovieRepository private constructor(
 
     fun getFavoriteTvShow(id: String): LiveData<TvShowEntityDb> = localDataSource.getFavoriteTvShow(id)
 
+    fun searchMovie(title: String): LiveData<PagedList<MovieEntityDb>> {
+        return LivePagedListBuilder(localDataSource.searchMovie(title),4).build()
+    }
+    fun searchTvShow(title: String): LiveData<PagedList<TvShowEntityDb>> {
+        return LivePagedListBuilder(localDataSource.searchTvShow(title),4).build()
+    }
+
+    fun searchFavoritesMovie(title: String): LiveData<PagedList<MovieEntityDb>> {
+        return LivePagedListBuilder(localDataSource.searchFavoritesMovie(title),4).build()
+    }
+
+    fun searchFavoritesTvShow(title: String): LiveData<PagedList<TvShowEntityDb>> {
+        return LivePagedListBuilder(localDataSource.searchFavoritesTvShow(title),4).build()
+    }
+
 }

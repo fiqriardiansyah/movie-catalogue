@@ -3,21 +3,13 @@ package com.example.moviecatalogue.ui.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.text.Html
-import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.SectionPagerAdapter
 import com.example.moviecatalogue.databinding.ActivityMainBinding
 import com.example.moviecatalogue.ui.favorites.FavoritesActivity
-import com.example.moviecatalogue.ui.movie.MoviesFragment
-import com.example.moviecatalogue.ui.tvshow.TvShowViewModel
-import com.example.moviecatalogue.ui.tvshow.TvShowsFragment
-import com.example.moviecatalogue.viewmodel.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 

@@ -11,4 +11,6 @@ import com.example.moviecatalogue.vo.Resource
 class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() {
     fun getMovies(): LiveData<Resource<PagedList<MovieEntity>>> = movieRepository.getAllMovie()
     fun getAllFavoriteMovies(): LiveData<PagedList<MovieEntity>> = movieRepository.getAllFavoriteMovie()
+    fun searchMovie(title: String): LiveData<PagedList<MovieEntity>> = movieRepository.searchMovie(title)
+    fun searchFavoritesMovie(title: String): LiveData<PagedList<MovieEntity>> = movieRepository.searchFavoritesMovie(title)
 }

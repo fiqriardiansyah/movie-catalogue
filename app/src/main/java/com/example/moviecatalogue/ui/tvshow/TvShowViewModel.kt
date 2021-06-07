@@ -11,4 +11,6 @@ import com.example.moviecatalogue.vo.Resource
 class TvShowViewModel(private val movieRepository: MovieRepository): ViewModel() {
     fun getTvShows(): LiveData<Resource<PagedList<TvShowEntity>>> = movieRepository.getAllTvShow()
     fun getAllFavoriteTvShow(): LiveData<PagedList<TvShowEntity>> = movieRepository.getAllFavoriteTvShow()
+    fun searchTvShow(title: String): LiveData<PagedList<TvShowEntity>> = movieRepository.searchTvShow(title)
+    fun searchFavoritesTvShow(title: String): LiveData<PagedList<TvShowEntity>> = movieRepository.searchFavoritesTvShow(title)
 }

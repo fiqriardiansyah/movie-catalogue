@@ -2,6 +2,7 @@ package com.example.moviecatalogue.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
+import androidx.paging.PagedList
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.moviecatalogue.data.source.local.entity.MovieEntity
 import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
@@ -46,5 +47,13 @@ class LocalDataSource private constructor(private val movieDao: MovieDao,private
     fun deleteFavoriteMovie(movie: MovieEntity) = favoriteDao.deleteMovie(movie)
 
     fun deleteFavoriteTvShow(tvShow: TvShowEntity) = favoriteDao.deleteTvShow(tvShow)
+
+    fun searchMovie(title: String): DataSource.Factory<Int,MovieEntity> = movieDao.searchMovie(title)
+
+    fun searchTvShow(title: String): DataSource.Factory<Int,TvShowEntity> = movieDao.searchTvShow(title)
+
+    fun searchFavoritesMovie(title: String): DataSource.Factory<Int,MovieEntity> = favoriteDao.searchMovie(title)
+
+    fun searchFavoritesTvShow(title: String): DataSource.Factory<Int,TvShowEntity> = favoriteDao.searchTvShow(title)
 
 }
