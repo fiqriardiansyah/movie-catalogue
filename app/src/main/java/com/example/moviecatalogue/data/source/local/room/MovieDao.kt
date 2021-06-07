@@ -1,8 +1,8 @@
 package com.example.moviecatalogue.data.source.local.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.moviecatalogue.data.source.local.entity.MovieEntity
 import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 
@@ -11,10 +11,10 @@ import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 interface MovieDao {
 
     @Query("SELECT * FROM movieentities ")
-    fun getMovies(): LiveData<List<MovieEntity>>
+    fun getMovies(): DataSource.Factory<Int,MovieEntity>
 
     @Query("SELECT * FROM tvshowentities ")
-    fun getTvShows(): LiveData<List<TvShowEntity>>
+    fun getTvShows(): DataSource.Factory<Int,TvShowEntity>
 
     @Query("SELECT * FROM movieentities WHERE movieid = :movieId ")
     fun getMovie(movieId: String): LiveData<MovieEntity>

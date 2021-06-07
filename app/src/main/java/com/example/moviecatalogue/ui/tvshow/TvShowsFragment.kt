@@ -50,8 +50,7 @@ class TvShowsFragment : Fragment() {
                         Status.LOADING -> binding.progressbar.visibility = View.VISIBLE
                         Status.SUCCESS -> {
                             binding.progressbar.visibility = View.GONE
-                            adapter.setData(tvShows.data)
-                            adapter.notifyDataSetChanged()
+                            adapter.submitList(tvShows.data)
 
                             if(tvShows.data?.size == 0){
                                 binding.emptyAnimation.visibility = View.VISIBLE
@@ -69,8 +68,7 @@ class TvShowsFragment : Fragment() {
         }else{
             viewModel.getAllFavoriteTvShow().observe(this,{ tvShows ->
                 binding.progressbar.visibility = View.GONE
-                adapter.setData(tvShows)
-                adapter.notifyDataSetChanged()
+                adapter.submitList(tvShows)
 
                 if(tvShows.size == 0){
                     binding.emptyAnimation.visibility = View.VISIBLE

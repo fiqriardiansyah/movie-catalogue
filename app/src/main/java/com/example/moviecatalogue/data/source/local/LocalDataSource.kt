@@ -1,6 +1,7 @@
 package com.example.moviecatalogue.data.source.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.moviecatalogue.data.source.local.entity.MovieEntity
 import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
@@ -17,9 +18,9 @@ class LocalDataSource private constructor(private val movieDao: MovieDao,private
         }
     }
 
-    fun getAllMovie() : LiveData<List<MovieEntity>> = movieDao.getMovies()
+    fun getAllMovie() : DataSource.Factory<Int,MovieEntity> = movieDao.getMovies()
 
-    fun getAllTvShow(): LiveData<List<TvShowEntity>> = movieDao.getTvShows()
+    fun getAllTvShow(): DataSource.Factory<Int,TvShowEntity> = movieDao.getTvShows()
 
     fun getMovie(movieId: String) = movieDao.getMovie(movieId)
 
@@ -30,9 +31,9 @@ class LocalDataSource private constructor(private val movieDao: MovieDao,private
     fun insertTvShows(tvShow: List<TvShowEntity>) = movieDao.insertTvShows(tvShow)
 
 
-    fun getAllFavoriteMovie(): LiveData<List<MovieEntity>> = favoriteDao.getAllMovies()
+    fun getAllFavoriteMovie(): DataSource.Factory<Int,MovieEntity> = favoriteDao.getAllMovies()
 
-    fun getAllFavoriteTvShow(): LiveData<List<TvShowEntity>> = favoriteDao.getAllTvShows()
+    fun getAllFavoriteTvShow(): DataSource.Factory<Int,TvShowEntity> = favoriteDao.getAllTvShows()
 
     fun getFavoriteMovie(movieId: String): LiveData<MovieEntity> = favoriteDao.getMovie(movieId)
 

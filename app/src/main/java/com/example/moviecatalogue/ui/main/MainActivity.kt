@@ -3,7 +3,10 @@ package com.example.moviecatalogue.ui.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.example.moviecatalogue.R
@@ -29,6 +32,25 @@ class MainActivity : AppCompatActivity() {
         val sectionsPagerAdapter = SectionPagerAdapter(this,supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
+
+        binding.edtSearch.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.viewPager.currentItem == 0){
+
+                }else{
+                    Log.d("far","1")
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
 
     }
 

@@ -14,5 +14,6 @@
     <string name="example_genre">Sci-Fi &amp; Fantasy, Action &amp; Adventure, Drama, War &amp; Politics</string>
     <string name="release">Release</string>
     <string name="example_release">04/14/2021 (ID)</string>
+    <string name="hint_search">Search Film</string>
 
 </resources>

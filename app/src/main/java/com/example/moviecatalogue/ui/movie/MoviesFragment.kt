@@ -53,8 +53,7 @@ class MoviesFragment : Fragment() {
                         Status.LOADING -> binding.progressbar.visibility = View.VISIBLE
                         Status.SUCCESS -> {
                             binding.progressbar.visibility = View.GONE
-                            adapter.setData(movies.data)
-                            adapter.notifyDataSetChanged()
+                            adapter.submitList(movies.data)
                             if(movies.data?.size == 0){
                                 binding.emptyAnimation.visibility = View.VISIBLE
                             }else{
@@ -72,8 +71,7 @@ class MoviesFragment : Fragment() {
             viewModel.getAllFavoriteMovies().observe(this,{ movies ->
                 if(movies != null){
                     binding.progressbar.visibility = View.GONE
-                    adapter.setData(movies)
-                    adapter.notifyDataSetChanged()
+                    adapter.submitList(movies)
                     if(movies.size == 0){
                         binding.emptyAnimation.visibility = View.VISIBLE
                     }else{

@@ -1,6 +1,7 @@
 package com.example.moviecatalogue.data.source.local.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -12,10 +13,10 @@ import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 interface FavoriteDao {
 
     @Query("SELECT * FROM movieentities")
-    fun getAllMovies(): LiveData<List<MovieEntity>>
+    fun getAllMovies(): DataSource.Factory<Int,MovieEntity>
 
     @Query("SELECT * FROM tvshowentities")
-    fun getAllTvShows(): LiveData<List<TvShowEntity>>
+    fun getAllTvShows(): DataSource.Factory<Int,TvShowEntity>
 
     @Query("SELECT * FROM movieentities WHERE movieid = :movieId")
     fun getMovie(movieId: String): LiveData<MovieEntity>

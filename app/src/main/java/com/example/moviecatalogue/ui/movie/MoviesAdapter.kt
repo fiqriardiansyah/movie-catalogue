@@ -7,6 +7,8 @@ import android.graphics.drawable.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -18,14 +20,20 @@ import com.example.moviecatalogue.databinding.MovieItemBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.utils.Utils
 
-class MoviesAdapter(val context: Context): RecyclerView.Adapter<MoviesAdapter.ViewHolder>(){
+class MoviesAdapter(val context: Context): PagedListAdapter<MovieEntity,MoviesAdapter.ViewHolder>(
+    DIFF_CALLBACK) {
 
-    val listMovies = ArrayList<MovieEntity>()
+    companion object {
+        private val DIFF_CALLBACK = object: DiffUtil.ItemCallback<MovieEntity>(){
+            override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+                return oldItem.movieId == newItem.movieId
+            }
 
-    fun setData(movies: List<MovieEntity>?){
-        if(movies == null) return
-        this.listMovies.clear()
-        this.listMovies.addAll(movies)
+            override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 
     inner class ViewHolder(private val binding: MovieItemBinding): RecyclerView.ViewHolder(binding.root) {
@@ -75,8 +83,10 @@ class MoviesAdapter(val context: Context): RecyclerView.Adapter<MoviesAdapter.Vi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(listMovies[position])
+        val movie = getItem(position)
+        if(movie != null){
+            holder.bind(movie)
+        }
     }
 
-    override fun getItemCount(): Int = this.listMovies.size
 }

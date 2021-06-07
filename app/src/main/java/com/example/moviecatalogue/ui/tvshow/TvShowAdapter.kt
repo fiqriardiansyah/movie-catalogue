@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -15,14 +17,19 @@ import com.example.moviecatalogue.databinding.TvShowItemBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.utils.Utils
 
-class TvShowAdapter(val context: Context): RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
+class TvShowAdapter(val context: Context): PagedListAdapter<TvShowEntity,TvShowAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    val listTvShow = ArrayList<TvShowEntity>()
+    companion object {
+        private val DIFF_CALLBACK = object: DiffUtil.ItemCallback<TvShowEntity>(){
+            override fun areItemsTheSame(oldItem: TvShowEntity, newItem: TvShowEntity): Boolean {
+                return oldItem.tvShowId == newItem.tvShowId
+            }
 
-    fun setData(tvShows: List<TvShowEntity>?){
-        if(tvShows == null) return
-        this.listTvShow.clear()
-        this.listTvShow.addAll(tvShows)
+            override fun areContentsTheSame(oldItem: TvShowEntity, newItem: TvShowEntity): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 
     inner class ViewHolder(private val binding: TvShowItemBinding): RecyclerView.ViewHolder(binding.root) {
@@ -63,8 +70,10 @@ class TvShowAdapter(val context: Context): RecyclerView.Adapter<TvShowAdapter.Vi
     }
 
     override fun onBindViewHolder(holder: TvShowAdapter.ViewHolder, position: Int) {
-        holder.bind(listTvShow[position])
+       val tvShow = getItem(position)
+        if(tvShow != null){
+            holder.bind(tvShow)
+        }
     }
 
-    override fun getItemCount(): Int = listTvShow.size
 }
