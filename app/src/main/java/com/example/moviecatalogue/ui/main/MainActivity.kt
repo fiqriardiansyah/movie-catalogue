@@ -9,12 +9,15 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.SectionPagerAdapter
 import com.example.moviecatalogue.databinding.ActivityMainBinding
 import com.example.moviecatalogue.ui.favorites.FavoritesActivity
 import com.example.moviecatalogue.ui.movie.MoviesFragment
+import com.example.moviecatalogue.ui.tvshow.TvShowViewModel
 import com.example.moviecatalogue.ui.tvshow.TvShowsFragment
+import com.example.moviecatalogue.viewmodel.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,25 +35,6 @@ class MainActivity : AppCompatActivity() {
         val sectionsPagerAdapter = SectionPagerAdapter(this,supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
-
-        binding.edtSearch.addTextChangedListener(object: TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(binding.viewPager.currentItem == 0){
-
-                }else{
-                    Log.d("far","1")
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
 
     }
 

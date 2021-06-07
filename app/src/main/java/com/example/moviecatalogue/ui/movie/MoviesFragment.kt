@@ -20,7 +20,6 @@ class MoviesFragment : Fragment() {
     private lateinit var binding: FragmentMoviesBinding
     private lateinit var viewModel: MovieViewModel
     private lateinit var adapter: MoviesAdapter
-//    private lateinit var sqlQuery: SimpleSQLiteQuery
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -9,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.sqlite.db.SimpleSQLiteQuery
+import com.example.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.example.moviecatalogue.databinding.FragmentTvShowsBinding
 import com.example.moviecatalogue.ui.main.MainActivity
 import com.example.moviecatalogue.viewmodel.ViewModelFactory
@@ -34,7 +35,7 @@ class TvShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val factory = ViewModelFactory.getInstance(requireActivity())
-        viewModel = ViewModelProvider(this,factory).get(TvShowViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(),factory).get(TvShowViewModel::class.java)
         adapter = TvShowAdapter(activity as Context)
 
         binding.rvTvShow.layoutManager = LinearLayoutManager(context)
